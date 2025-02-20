@@ -7,9 +7,14 @@
 // console.log(factorial(5)); // Output: 120
 // console.log(factorial(0)); // Output: 1
 
-function factorial(n) {
-  // Your code here
-}
+const factorial = (n: number, memo: Record<number, number> = {}): number => {
+  if (n === 0) return 1;
+  if (memo[n]) return memo[n];
+  return (memo[n] = n * factorial(n - 1, memo));
+};
+
+// console.log(factorial(5)); // Output: 120
+// console.log(factorial(0)); // Output: 1
 
 // 2. Sum of an Array
 // Write a recursive function to calculate the sum of all numbers in an array.
@@ -19,9 +24,22 @@ function factorial(n) {
 // console.log(sumArray([])); // Output: 0
 // console.log(sumArray([5])); // Output: 5
 
-function sumArray(arr) {
-  // Your code here
+function sumArray(arr: number[], memo = 0): number {
+  if (!arr.length) {
+    return memo;
+  } else {
+    const lastElement = arr.pop();
+    if (lastElement !== undefined) {
+      memo += lastElement;
+      return sumArray(arr, memo);
+    }
+  }
+  return memo;
 }
+
+// console.log(sumArray([1, 2, 3, 4])); // Output: 10
+// console.log(sumArray([])); // Output: 0
+// console.log(sumArray([5])); // Output: 5
 
 // 3. Reverse a String
 // Write a recursive function that reverses a given string.
@@ -31,9 +49,19 @@ function sumArray(arr) {
 // console.log(reverseString("racecar")); // Output: "racecar"
 // console.log(reverseString("abc")); // Output: "cba"
 
-function reverseString(str) {
-  // Your code here
+function reverseString(str: string, memo = "") {
+  if (!str.length) {
+    return memo;
+  } else {
+    memo += str[str.length - 1];
+    console.log(memo);
+    return reverseString(str.slice(0, -1), memo);
+  }
 }
+
+// console.log(reverseString("hello")); // Output: "olleh"
+// console.log(reverseString("racecar")); // Output: "racecar"
+// console.log(reverseString("abc")); // Output: "cba"
 
 // 4. Check if a String is a Palindrome
 // Write a recursive function to check if a string is a palindrome (reads the same forward and backward).
@@ -43,9 +71,21 @@ function reverseString(str) {
 // console.log(isPalindrome("hello"));   // Output: false
 // console.log(isPalindrome("a"));       // Output: true
 
-function isPalindrome(str) {
-  // Your code here
+const checkPalindrome = (str: string, left: number, right: number) => {
+  if (left >= right) return true;
+  if (str[left] !== str[right]) return false;
+  return checkPalindrome(str, left + 1, right - 1);
+};
+
+function isPalindrome(str: string) {
+  const stripStr = str.replace(/[^a-z0-9]/gi, "").toLowerCase();
+  return checkPalindrome(stripStr, 0, stripStr.length - 1);
 }
+
+// console.log(isPalindrome("racecar")); // Output: true
+// console.log(isPalindrome("hello")); // Output: false
+// console.log(isPalindrome("a")); // Output: true
+// console.log(isPalindrome("A man, a plan, a canal, Panama")); // output true
 
 // 5. Compute the N-th Fibonacci Number
 // Write a recursive function to compute the nth Fibonacci number.
@@ -57,9 +97,18 @@ function isPalindrome(str) {
 // console.log(fibonacci(0)); // Output: 0
 // console.log(fibonacci(1)); // Output: 1
 
-function fibonacci(n) {
-  // Your code here
+function fibonacci(n: number, memo: Record<number, number> = {}) {
+  if (n === 0) return 0;
+  if (n === 1) return 1;
+  if (memo[n]) return memo[n];
+
+  memo[n] = fibonacci(n - 1, memo) + fibonacci(n - 2, memo);
+  return memo[n];
 }
+
+// console.log(fibonacci(6)); // Output: 8
+// console.log(fibonacci(0)); // Output: 0
+// console.log(fibonacci(1)); // Output: 1
 
 // 6. Flatten a Nested Array
 // Write a recursive function to flatten an array that contains nested arrays into a single-level array.
@@ -68,10 +117,29 @@ function fibonacci(n) {
 // console.log(flattenArray([1, [2, [3, 4], 5], 6])); // Output: [1, 2, 3, 4, 5, 6]
 // console.log(flattenArray([1, [2, [3, [4, [5]]]]])); // Output: [1, 2, 3, 4, 5]
 // console.log(flattenArray([])); // Output: []
+type NestedArray = number | NestedArray[];
+function flattenArray(arr: NestedArray, memo: number[] = []) {
+  if (!Array.isArray(arr)) {
+    memo.push(arr);
+    return memo;
+  }
 
-function flattenArray(arr) {
-  // Your code here
+  if (!arr.length) {
+    return memo;
+  }
+
+  const num = arr.shift() as number;
+  if (Array.isArray(num)) {
+    flattenArray(num, memo);
+  } else {
+    memo.push(num);
+  }
+  return flattenArray(arr, memo);
 }
+
+console.log(flattenArray([1, [2, [3, 4], 5], 6])); // Output: [1, 2, 3, 4, 5, 6]
+console.log(flattenArray([1, [2, [3, [4, [5]]]]])); // Output: [1, 2, 3, 4, 5]
+console.log(flattenArray([])); // Output: []
 
 // 7. Count the Number of Occurrences of a Value in an Array
 // Write a recursive function that counts how many times a given value appears in an array.
@@ -81,9 +149,9 @@ function flattenArray(arr) {
 // console.log(countOccurrences([1, 1, 1, 1, 1], 1)); // Output: 5
 // console.log(countOccurrences([1, 2, 3, 4, 5], 6)); // Output: 0
 
-function countOccurrences(arr, value) {
-  // Your code here
-}
+// function countOccurrences(arr, value) {
+//   // Your code here
+// }
 
 // 8. Find the Maximum Number in an Array
 // Write a recursive function that finds and returns the maximum value in an array.
@@ -93,8 +161,6 @@ function countOccurrences(arr, value) {
 // console.log(findMax([7, 7, 7, 7])); // Output: 7
 // console.log(findMax([-1, -2, -3, -4])); // Output: -1
 
-function findMax(arr) {
-  // Your code here
-}
-
-
+// function findMax(arr) {
+//   // Your code here
+// }
