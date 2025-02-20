@@ -137,9 +137,9 @@ function flattenArray(arr: NestedArray, memo: number[] = []) {
   return flattenArray(arr, memo);
 }
 
-console.log(flattenArray([1, [2, [3, 4], 5], 6])); // Output: [1, 2, 3, 4, 5, 6]
-console.log(flattenArray([1, [2, [3, [4, [5]]]]])); // Output: [1, 2, 3, 4, 5]
-console.log(flattenArray([])); // Output: []
+// console.log(flattenArray([1, [2, [3, 4], 5], 6])); // Output: [1, 2, 3, 4, 5, 6]
+// console.log(flattenArray([1, [2, [3, [4, [5]]]]])); // Output: [1, 2, 3, 4, 5]
+// console.log(flattenArray([])); // Output: []
 
 // 7. Count the Number of Occurrences of a Value in an Array
 // Write a recursive function that counts how many times a given value appears in an array.
@@ -149,9 +149,20 @@ console.log(flattenArray([])); // Output: []
 // console.log(countOccurrences([1, 1, 1, 1, 1], 1)); // Output: 5
 // console.log(countOccurrences([1, 2, 3, 4, 5], 6)); // Output: 0
 
-// function countOccurrences(arr, value) {
-//   // Your code here
-// }
+function countOccurrences(arr: number[], value: number, memo = 0) {
+  if (!arr.length) return memo;
+
+  const [firstEl, ...rest] = arr;
+  if (firstEl === value) {
+    memo++;
+  }
+
+  return countOccurrences(rest, value, memo);
+}
+
+// console.log(countOccurrences([1, 2, 3, 4, 2, 2, 5], 2)); // Output: 3
+// console.log(countOccurrences([1, 1, 1, 1, 1], 1)); // Output: 5
+// console.log(countOccurrences([1, 2, 3, 4, 5], 6)); // Output: 0
 
 // 8. Find the Maximum Number in an Array
 // Write a recursive function that finds and returns the maximum value in an array.
@@ -161,6 +172,15 @@ console.log(flattenArray([])); // Output: []
 // console.log(findMax([7, 7, 7, 7])); // Output: 7
 // console.log(findMax([-1, -2, -3, -4])); // Output: -1
 
-// function findMax(arr) {
-//   // Your code here
-// }
+function findMax(arr: number[], memo = -Infinity) {
+  if (!arr.length) return memo;
+
+  const [num, ...rest] = arr;
+  if (num > memo) memo = arr[0];
+
+  return findMax(rest, memo);
+}
+
+console.log(findMax([1, 5, 3, 9, 2])); // Output: 9
+console.log(findMax([7, 7, 7, 7])); // Output: 7
+console.log(findMax([-1, -2, -3, -4])); // Output: -1
