@@ -8,9 +8,60 @@
 // console.log(threeSum([0, 1, 1])); // Output: []
 // console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
 
-function threeSum(arr) {
-  // Your code here
+function threeSum(arr: number[]) {
+  arr.sort((a, b) => a - b);
+  // start of third function
+  const twoSumRecursive = (
+    arr: number[],
+    fixedIdx: number,
+    left: number,
+    right: number,
+    result: number[][]
+  ) => {
+    if (left >= right) {
+      return;
+    }
+    let currentSum = arr[fixedIdx] + arr[left] + arr[right];
+
+    if (currentSum === 0) {
+      result.push([arr[fixedIdx], arr[left], arr[right]]);
+      left += 1;
+      right -= 1;
+
+      while (left < right && arr[left] === arr[left - 1]) {
+        left += 1;
+      }
+
+      while (left < right && arr[right] === arr[right + 1]) {
+        right -= 1;
+      }
+      twoSumRecursive(arr, fixedIdx, left, right, result);
+    } else if (currentSum < 0) {
+      twoSumRecursive(arr, fixedIdx, left + 1, right, result);
+    } else {
+      twoSumRecursive(arr, fixedIdx, left, right - 1, result);
+    }
+  };
+  // start of second function
+  const findTriplets = (arr: number[], index: number, result: number[][]) => {
+    if (index >= arr.length - 2) {
+      return result;
+    }
+
+    if (index === 0 || arr[index] !== arr[index - 1]) {
+      twoSumRecursive(arr, index, index + 1, arr.length - 1, result);
+    }
+
+    findTriplets(arr, index + 1, result);
+    return result;
+  };
+
+  return findTriplets(arr, 0, []);
 }
+
+// console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+// console.log(threeSum([0, 1, 1])); // Output: []
+// console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
 
 // 10. Rock, Paper, Scissors (Generate All Possible Outcomes)
 // Write a recursive function that generates all possible outcomes of a game of Rock, Paper, Scissors for n rounds.
@@ -27,6 +78,24 @@ function threeSum(arr) {
 // console.log(rockPaperScissors(1));
 // Expected Output: [["rock"], ["paper"], ["scissors"]]
 
-function rockPaperScissors(n) {
-  // Your code here
+function rockPaperScissors(
+  n: number,
+  memo: string[][] = [["rock"], ["paper"], ["scissors"]]
+) {
+  let arr: string[][] = [];
+  const choices = ["rock", "paper", "scissors"];
+  if (n === 1) {
+    return memo;
+  }
+
+  for (let i = 0; i < memo.length; i++) {
+    for (let choice of choices) {
+      arr.push([...memo[i], choice]);
+    }
+  }
+  memo = arr;
+  return rockPaperScissors(n - 1, memo);
 }
+
+// console.log(rockPaperScissors(1));
+console.log(rockPaperScissors(2));
