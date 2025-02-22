@@ -7,7 +7,9 @@
 // Expected Output: [[-1, -1, 2], [-1, 0, 1]]
 // console.log(threeSum([0, 1, 1])); // Output: []
 // console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
-
+// this is a crazy function was trying to figure out to pair it down a bit without affecting the time and space
+// complexity
+// ist function
 function threeSum(arr: number[]) {
   arr.sort((a, b) => a - b);
   // start of third function
@@ -16,7 +18,7 @@ function threeSum(arr: number[]) {
     fixedIdx: number,
     left: number,
     right: number,
-    result: number[][]
+    memo: number[][]
   ) => {
     if (left >= right) {
       return;
@@ -24,7 +26,7 @@ function threeSum(arr: number[]) {
     let currentSum = arr[fixedIdx] + arr[left] + arr[right];
 
     if (currentSum === 0) {
-      result.push([arr[fixedIdx], arr[left], arr[right]]);
+      memo.push([arr[fixedIdx], arr[left], arr[right]]);
       left += 1;
       right -= 1;
 
@@ -35,31 +37,31 @@ function threeSum(arr: number[]) {
       while (left < right && arr[right] === arr[right + 1]) {
         right -= 1;
       }
-      twoSumRecursive(arr, fixedIdx, left, right, result);
+      twoSumRecursive(arr, fixedIdx, left, right, memo);
     } else if (currentSum < 0) {
-      twoSumRecursive(arr, fixedIdx, left + 1, right, result);
+      twoSumRecursive(arr, fixedIdx, left + 1, right, memo);
     } else {
-      twoSumRecursive(arr, fixedIdx, left, right - 1, result);
+      twoSumRecursive(arr, fixedIdx, left, right - 1, memo);
     }
   };
   // start of second function
-  const findTriplets = (arr: number[], index: number, result: number[][]) => {
+  const findTriplets = (arr: number[], index: number, memo: number[][]) => {
     if (index >= arr.length - 2) {
-      return result;
+      return memo;
     }
 
     if (index === 0 || arr[index] !== arr[index - 1]) {
-      twoSumRecursive(arr, index, index + 1, arr.length - 1, result);
+      twoSumRecursive(arr, index, index + 1, arr.length - 1, memo);
     }
 
-    findTriplets(arr, index + 1, result);
-    return result;
+    findTriplets(arr, index + 1, memo);
+    return memo;
   };
 
   return findTriplets(arr, 0, []);
 }
 
-// console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+console.log(threeSum([-1, 0, 1, 2, -1, -4]));
 // console.log(threeSum([0, 1, 1])); // Output: []
 // console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
 
@@ -98,4 +100,4 @@ function rockPaperScissors(
 }
 
 // console.log(rockPaperScissors(1));
-console.log(rockPaperScissors(2));
+// console.log(rockPaperScissors(2));
