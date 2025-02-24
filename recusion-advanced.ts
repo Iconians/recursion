@@ -7,44 +7,44 @@
 // Expected Output: [[-1, -1, 2], [-1, 0, 1]]
 // console.log(threeSum([0, 1, 1])); // Output: []
 // console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
-// this is a crazy function was trying to figure out to pair it down a bit without affecting the time and space
-// complexity
+// this is a crazy function was trying to figure out to pair it down a bit without affecting the time and space complexity
 // ist function
+
+const twoSumRecursive = (
+  arr: number[],
+  fixedIdx: number,
+  left: number,
+  right: number,
+  memo: number[][]
+) => {
+  if (left >= right) {
+    return;
+  }
+  let currentSum = arr[fixedIdx] + arr[left] + arr[right];
+
+  if (currentSum === 0) {
+    memo.push([arr[fixedIdx], arr[left], arr[right]]);
+    left += 1;
+    right -= 1;
+
+    while (left < right && arr[left] === arr[left - 1]) {
+      left += 1;
+    }
+
+    while (left < right && arr[right] === arr[right + 1]) {
+      right -= 1;
+    }
+    twoSumRecursive(arr, fixedIdx, left, right, memo);
+  } else if (currentSum < 0) {
+    twoSumRecursive(arr, fixedIdx, left + 1, right, memo);
+  } else {
+    twoSumRecursive(arr, fixedIdx, left, right - 1, memo);
+  }
+};
+
 function threeSum(arr: number[]) {
   arr.sort((a, b) => a - b);
-  // start of third function
-  const twoSumRecursive = (
-    arr: number[],
-    fixedIdx: number,
-    left: number,
-    right: number,
-    memo: number[][]
-  ) => {
-    if (left >= right) {
-      return;
-    }
-    let currentSum = arr[fixedIdx] + arr[left] + arr[right];
 
-    if (currentSum === 0) {
-      memo.push([arr[fixedIdx], arr[left], arr[right]]);
-      left += 1;
-      right -= 1;
-
-      while (left < right && arr[left] === arr[left - 1]) {
-        left += 1;
-      }
-
-      while (left < right && arr[right] === arr[right + 1]) {
-        right -= 1;
-      }
-      twoSumRecursive(arr, fixedIdx, left, right, memo);
-    } else if (currentSum < 0) {
-      twoSumRecursive(arr, fixedIdx, left + 1, right, memo);
-    } else {
-      twoSumRecursive(arr, fixedIdx, left, right - 1, memo);
-    }
-  };
-  // start of second function
   const findTriplets = (arr: number[], index: number, memo: number[][]) => {
     if (index >= arr.length - 2) {
       return memo;
@@ -61,7 +61,7 @@ function threeSum(arr: number[]) {
   return findTriplets(arr, 0, []);
 }
 
-console.log(threeSum([-1, 0, 1, 2, -1, -4]));
+// console.log(threeSum([-1, 0, 1, 2, -1, -4]));
 // console.log(threeSum([0, 1, 1])); // Output: []
 // console.log(threeSum([0, 0, 0])); // Output: [[0, 0, 0]]
 
